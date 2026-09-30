@@ -1,5 +1,5 @@
-import { GarageExperience } from "../components/experience/GarageExperience";
+import { redirect } from "next/navigation";
 
 export default function Home() {
-  return <GarageExperience />;
+  redirect("/create");
 }

@@ -1,38 +1,149 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@300;400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@300;400;500;600&family=Noto+Serif+JP:wght@400;500&display=swap");
+@import "tailwindcss";
 
+:root { --ink: #161917; --paper: #e9e5db; --muted: #74766f; --line: #c8c3b7; --red: #9a2d26; --night: #05080c; }
 * { box-sizing: border-box; }
-html, body { margin: 0; min-height: 100%; background: #030405; color: #edf0f2; }
-body { font-family: "Manrope", Arial, sans-serif; overflow: hidden; }
-button { color: inherit; font: inherit; }
-.garage { width: 100vw; height: 100dvh; position: relative; background: #030405; overflow: hidden; }
-.garage-canvas { position: absolute !important; inset: 0; touch-action: none; }
-.intro { position: absolute; inset: 0; display: grid; place-items: center; background: #030405; z-index: 2; }
-.hello { margin: 0; font-size: clamp(2.2rem, 7vw, 6.5rem); font-weight: 300; animation: hello 2.5s ease-in-out both; }
-@keyframes hello { 0% { opacity: 0; letter-spacing: .1em; } 16%, 55% { opacity: 1; letter-spacing: .24em; } 100% { opacity: 0; letter-spacing: .32em; } }
-.loader { width: min(360px, calc(100vw - 48px)); position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); font: 500 10px/1.3 "DM Mono", monospace; letter-spacing: .14em; color: #e7eaeb; z-index: 3; }
-.loader-row { display: flex; justify-content: space-between; margin-bottom: 11px; }
-.loader-track { height: 1px; overflow: hidden; background: #32363a; }
-.loader-track i { display: block; height: 100%; background: #f2f4f5; transform-origin: left; transition: transform .28s ease; }
-.loader p { margin: 12px 0 0; color: #7d858b; font-size: 8px; }
-.hud { position: absolute; inset: 0; z-index: 2; pointer-events: none; transition: opacity .35s ease; }
-.hud.hidden { opacity: 0; }
-.car-info { position: absolute; top: max(28px, env(safe-area-inset-top)); left: max(28px, env(safe-area-inset-left)); }
-.car-info p, .collection-navigation, .experience-controls { font: 500 10px/1.4 "DM Mono", monospace; letter-spacing: .12em; }
-.car-info p { margin: 0; color: #bcc3c8; }
-.car-info h1 { font-weight: 300; font-size: clamp(1.5rem, 3.2vw, 3.25rem); line-height: .98; letter-spacing: -.06em; margin: 8px 0 12px; }
-.car-info span { color: #df492f; }
-.collection-navigation { position: absolute; right: max(28px, env(safe-area-inset-right)); bottom: max(28px, env(safe-area-inset-bottom)); display: flex; align-items: center; gap: 14px; color: #ccd1d4; pointer-events: auto; }
-.collection-navigation button { appearance: none; padding: 0; border: 0; background: none; color: inherit; font: inherit; font-size: 16px; }
-.collection-navigation button:disabled { opacity: .28; }
-.collection-navigation button { min-width: 44px; min-height: 44px; cursor: pointer; }
-.collection-navigation button:hover { color: #ff624a; }
-.asset-credits { position: absolute; top: max(28px, env(safe-area-inset-top)); right: 28px; color: #889096; font: 8px monospace; pointer-events: auto; text-decoration: none; }
-.experience-controls { position: absolute; left: max(28px, env(safe-area-inset-left)); bottom: max(29px, env(safe-area-inset-bottom)); pointer-events: auto; }
-.experience-controls button { padding: 0; border: 0; background: none; cursor: pointer; font: inherit; letter-spacing: inherit; }
-.experience-controls button:hover { color: #ff624a; }
-.experience-controls p { margin: 14px 0 0; color: #889096; font-size: 8px; }
-.experience-controls span { margin-left: 14px; }
-.fallback { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; gap: 10px; background: radial-gradient(circle at center, #161c21, #030405 60%); font: 500 11px "DM Mono", monospace; letter-spacing: .1em; }
-.fallback p { color: #90999f; font-size: 9px; }
-@media (max-width: 600px) { .car-info { top: max(22px, env(safe-area-inset-top)); left: max(20px, env(safe-area-inset-left)); } .collection-navigation { right: 20px; bottom: max(20px, env(safe-area-inset-bottom)); } .experience-controls { left: 20px; bottom: max(21px, env(safe-area-inset-bottom)); } .experience-controls span { display: none; } }
-@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+html, body { margin: 0; min-height: 100%; }
+body { background: var(--paper); color: var(--ink); font-family: "Manrope", sans-serif; }
+button, input, textarea { color: inherit; font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible { outline: 1px solid currentColor; outline-offset: 4px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+.creator { min-height: 100dvh; padding: max(24px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right)) max(56px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left)); background-color: var(--paper); background-image: linear-gradient(rgba(30,28,23,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(30,28,23,.035) 1px, transparent 1px); background-size: 48px 48px; }
+.creator-header { max-width: 1120px; margin: 0 auto 9vh; display: flex; justify-content: space-between; font: 500 10px/1 "DM Mono", monospace; letter-spacing: .16em; }
+.wordmark { color: var(--ink); text-decoration: none; font-weight: 500; }
+.creator-form { max-width: 1120px; margin: auto; }
+.creator-intro { display: grid; grid-template-columns: 76px 1fr; align-items: end; margin-bottom: 96px; }
+.creator-intro p { writing-mode: vertical-rl; margin: 0; font-family: "Noto Serif JP", serif; font-size: 12px; letter-spacing: .24em; color: var(--red); }
+.creator-intro h1 { margin: 0; font-size: clamp(3rem, 8.5vw, 7.5rem); font-weight: 300; line-height: .78; letter-spacing: -.075em; }
+.creator-intro span { grid-column: 2; margin-top: 36px; color: #61635e; max-width: 430px; font-size: 14px; }
+fieldset { border: 0; border-top: 1px solid var(--line); padding: 28px 0 88px; margin: 0; }
+legend { width: 100%; padding: 0 0 26px; font: 500 11px "DM Mono", monospace; letter-spacing: .15em; }
+legend b { color: var(--red); margin-right: 18px; } legend em { float: right; font-style: normal; color: var(--muted); font-size: 9px; }
+.car-options { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.car-option { position: relative; display: block; cursor: pointer; border: 1px solid transparent; padding: 10px; transition: border-color .25s, background .25s; }
+.car-option:hover, .car-option.selected { border-color: #8b887f; background: rgba(255,255,255,.22); }
+.car-option input { position: absolute; opacity: 0; }
+.car-preview { height: 250px; background: #111416; }
+.car-option > span { display: flex; justify-content: space-between; padding: 16px 2px 7px; font: 500 11px "DM Mono", monospace; letter-spacing: .08em; }
+.car-option small { color: var(--muted); font-size: 9px; }
+.field-note { margin: 14px 0 0; color: var(--muted); font: 9px/1.5 "DM Mono", monospace; letter-spacing: .05em; }
+.text-field { position: relative; display: block; max-width: 760px; }
+.text-field > span { display: block; margin-bottom: 14px; color: var(--muted); font: 9px "DM Mono", monospace; letter-spacing: .12em; }
+.text-field input, .text-field textarea { width: 100%; border: 0; border-bottom: 1px solid #9c998f; border-radius: 0; background: transparent; padding: 8px 0 16px; font-size: clamp(1rem, 2vw, 1.35rem); outline: none; }
+.text-field input:focus, .text-field textarea:focus { border-color: var(--red); }
+.text-field textarea { min-height: 170px; resize: vertical; line-height: 1.6; }
+.text-field small { position: absolute; right: 0; bottom: 10px; color: var(--muted); font: 9px "DM Mono", monospace; }
+.text-field.signature { margin-top: 32px; max-width: 260px; }
+.line-fields { max-width: 760px; }
+.line-fields label { display: grid; grid-template-columns: 48px 1fr; align-items: center; border-bottom: 1px solid #9c998f; }
+.line-fields label:focus-within { border-color: var(--red); }
+.line-fields span { color: var(--red); font: 10px "DM Mono", monospace; }
+.line-fields input { width: 100%; border: 0; background: transparent; padding: 19px 0; font-family: "Noto Serif JP", serif; font-size: clamp(1rem, 2vw, 1.4rem); outline: none; }
+.creator-actions { display: flex; justify-content: flex-end; gap: 12px; padding-bottom: 64px; }
+.creator-actions button, .ticket-actions button { min-height: 52px; padding: 0 28px; cursor: pointer; border: 1px solid var(--ink); font: 500 10px "DM Mono", monospace; letter-spacing: .12em; transition: background .2s, color .2s; }
+.button-secondary { background: transparent; } .button-secondary:hover { background: rgba(20,22,20,.07); }
+.button-primary { background: var(--ink); color: var(--paper); } .button-primary:hover { background: var(--red); border-color: var(--red); }
+button:disabled { opacity: .42; cursor: not-allowed; }
+.form-error { color: #8e241f; font: 10px "DM Mono", monospace; letter-spacing: .06em; }
+.preview-overlay { position: fixed; inset: 0; z-index: 20; background: var(--night); }
+.preview-close { position: absolute; z-index: 25; top: max(20px, env(safe-area-inset-top)); left: max(20px, env(safe-area-inset-left)); min-width: 48px; min-height: 48px; border: 0; background: transparent; color: white; cursor: pointer; font: 9px "DM Mono", monospace; letter-spacing: .12em; }
+.creator-result { background: #dcd7ca; }
+.ticket-result { max-width: 900px; margin: 8vh auto 0; text-align: center; }
+.ticket { position: relative; display: grid; grid-template-columns: 122px 1fr; min-height: 430px; background: #eae5d8; border: 1px solid #45443e; text-align: left; box-shadow: 0 30px 80px rgba(32,29,21,.12); }
+.ticket::before, .ticket::after { content: ""; position: absolute; left: 111px; width: 20px; height: 20px; border-radius: 50%; background: #dcd7ca; border: 1px solid #45443e; z-index: 2; }
+.ticket::before { top: -11px; } .ticket::after { bottom: -11px; }
+.ticket-stub { border-right: 1px dashed #77746b; padding: 30px 18px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; }
+.ticket-stub span { writing-mode: vertical-rl; font: 500 12px "Noto Serif JP", serif; letter-spacing: .35em; }
+.ticket-stub strong { font: 400 58px "DM Mono", monospace; color: var(--red); }
+.ticket-stub small { writing-mode: vertical-rl; font: 8px "DM Mono", monospace; letter-spacing: .17em; }
+.ticket-main { padding: 38px 52px 34px; }
+.ticket-heading { display: flex; justify-content: space-between; font: 500 10px "DM Mono", monospace; letter-spacing: .17em; }
+.ticket-main h2 { margin: 50px 0 5px; font-size: clamp(1.6rem, 4vw, 3.6rem); font-weight: 300; letter-spacing: -.055em; }
+.ticket-main > p { color: var(--muted); font: 10px "DM Mono", monospace; }
+.ticket-route { display: flex; align-items: center; gap: 16px; margin: 38px 0; font: 500 11px "DM Mono", monospace; letter-spacing: .1em; }
+.ticket-route i { flex: 1; border-top: 1px dashed #77746b; }
+.ticket-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
+.ticket-grid span { color: var(--muted); font: 8px "DM Mono", monospace; letter-spacing: .1em; }
+.ticket-grid strong { display: block; color: var(--ink); margin-top: 8px; font-size: 10px; }
+.ticket-code { text-align: right; margin-top: 38px; color: var(--red); font: 500 18px "DM Mono", monospace; letter-spacing: .23em; }
+.ready-label { margin-top: 50px; font: 500 10px "DM Mono", monospace; letter-spacing: .16em; }
+.drive-url { display: inline-block; color: #595b56; margin: 14px 0 26px; font: 10px "DM Mono", monospace; }
+.ticket-actions { display: flex; justify-content: center; gap: 10px; }.ticket-actions button { background: transparent; }.ticket-actions button:hover { background: var(--ink); color: var(--paper); }
+.privacy-note { color: var(--muted); font: 9px "DM Mono", monospace; }
+
+.drive-experience { position: fixed; inset: 0; overflow: hidden; background: #030507; color: #f0ede5; }
+.drive-canvas { position: absolute !important; inset: 0; touch-action: none; }
+.drive-intro { position: absolute; inset: 0; z-index: 10; display: grid; place-content: center; text-align: center; background: #030507; }
+.drive-intro h1 { margin: 0; font-size: clamp(2.2rem, 7vw, 6rem); font-weight: 300; letter-spacing: .2em; animation: breathe 1.9s ease both; }
+.drive-intro h1 strong { display: inline-block; max-width: 92vw; overflow-wrap: anywhere; color: #ba4a40; font-weight: 300; }
+@keyframes breathe { 0% { opacity: 0; letter-spacing: .08em; } 35%,70% { opacity: 1; } 100% { opacity: 0; letter-spacing: .3em; } }
+.loading-screen { width: 100%; padding: 24px; grid-template-columns: minmax(200px, 360px) 50px; gap: 12px; align-items: center; font: 9px "DM Mono", monospace; letter-spacing: .14em; }
+.loading-screen > span, .loading-screen small { grid-column: 1 / -1; text-align: left; }
+.loading-screen div { height: 1px; background: #33383c; }.loading-screen i { display: block; height: 100%; background: #eeeae2; transition: width .15s linear; }
+.loading-screen small { color: #737c82; font-size: 8px; margin-top: 4px; }
+.ready-screen { gap: 24px; font: 10px "DM Mono", monospace; letter-spacing: .16em; }
+.ready-screen button { min-width: 130px; min-height: 48px; color: #f0ede5; border: 1px solid #777d80; background: transparent; cursor: pointer; letter-spacing: .14em; }
+.ready-screen small { color: #747d82; font-size: 8px; letter-spacing: .06em; }
+.drive-hud { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+.windshield-text { position: absolute; right: 10vw; bottom: 24vh; display: flex; flex-direction: column; align-items: flex-end; color: rgba(237,241,230,.78); font: 400 clamp(.82rem, 1.4vw, 1.1rem)/1.55 "Noto Serif JP", serif; text-shadow: 0 1px 8px rgba(255,255,255,.3); letter-spacing: .025em; }
+.stereo { position: absolute; left: max(24px, env(safe-area-inset-left)); bottom: max(24px, env(safe-area-inset-bottom)); width: 220px; height: 62px; display: grid; grid-template-columns: 1fr 38px; grid-template-rows: 1fr 14px; gap: 2px 8px; padding: 10px 12px; border: 1px solid rgba(190,200,194,.28); background: rgba(5,9,9,.78); color: #83ad95; font: 9px "DM Mono", monospace; pointer-events: auto; box-shadow: inset 0 0 18px rgba(62,142,94,.08); }
+.stereo.playing { color: #9bdfad; box-shadow: inset 0 0 20px rgba(72,180,108,.17), 0 0 24px rgba(39,98,64,.11); }
+.stereo span { display: flex; justify-content: space-between; }.stereo i { color: #5d7668; font-style: normal; }
+.stereo button { grid-row: 1 / 3; grid-column: 2; border: 1px solid #445149; background: transparent; color: inherit; cursor: pointer; }
+.stereo label, .stereo input { width: 100%; height: 10px; }.stereo input { accent-color: #7caf8a; }
+.stereo.unavailable { display: flex; flex-direction: column; justify-content: center; }.stereo.unavailable small { color: #69736d; margin-top: 5px; }
+.youtube-mount { position: absolute; width: 1px; height: 1px; overflow: hidden; opacity: 0; pointer-events: none; }
+.letter-trigger { position: absolute; top: max(28px, calc(env(safe-area-inset-top) + 16px)); right: max(28px, calc(env(safe-area-inset-right) + 16px)); width: 52px; height: 52px; padding: 15px; border: 0; background: transparent; color: #f3f1e7; cursor: pointer; pointer-events: auto; filter: drop-shadow(0 0 8px rgba(218,228,255,.65)); }
+.letter-trigger svg { width: 100%; fill: currentColor; }
+.letter-overlay { position: absolute; inset: 0; z-index: 8; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 28px; text-align: center; background: linear-gradient(rgba(3,8,16,.2), rgba(3,8,16,.62)); backdrop-filter: blur(3px); }
+.letter-mark { margin-bottom: 48px; font-size: 13px; }.letter-overlay > p { color: #aeb5bb; font: 9px "DM Mono", monospace; letter-spacing: .22em; }
+.letter-overlay blockquote { max-width: 600px; margin: 30px 0; white-space: pre-line; font: 400 clamp(1.25rem, 3vw, 2.25rem)/1.65 "Noto Serif JP", serif; }.letter-overlay cite { font: 10px "DM Mono", monospace; letter-spacing: .12em; }
+.letter-overlay button { margin-top: 60px; min-width: 48px; min-height: 48px; border: 0; background: transparent; color: #c1c5c4; cursor: pointer; font: 9px "DM Mono", monospace; letter-spacing: .16em; }
+.road-not-found { min-height: 100dvh; display: flex; flex-direction: column; justify-content: center; padding: 10vw; background: radial-gradient(circle at 70% 20%, #26313c, #06090d 55%); color: #e8e9e4; }
+.road-not-found span, .road-not-found a { font: 9px "DM Mono", monospace; letter-spacing: .16em; }.road-not-found h1 { margin: 36px 0 20px; font-size: clamp(3rem, 9vw, 8rem); font-weight: 300; line-height: .85; letter-spacing: -.06em; }.road-not-found p { color: #858d91; }.road-not-found a { color: white; margin-top: 40px; }
+.fallback { position: absolute; inset: 0; z-index: 4; display: grid; place-content: center; gap: 12px; padding: 24px; text-align: center; background: radial-gradient(circle at 50% 30%, #28343d, #05080c 62%); color: #eef0eb; font: 10px "DM Mono", monospace; letter-spacing: .12em; }.fallback p { color: #8d969b; font-size: 8px; }
+
+/* Journey editor */
+.distance-editor { max-width: 760px; display: grid; grid-template-columns: 180px 1fr; align-items: center; gap: 48px; }
+.distance-editor label { display: grid; grid-template-columns: 1fr auto; align-items: end; border-bottom: 1px solid #97938a; }.distance-editor label span { grid-column: 1 / -1; color: var(--muted); font: 9px "DM Mono", monospace; letter-spacing: .12em; }.distance-editor label input { width: 110px; border: 0; background: transparent; padding: 10px 0; font: 300 42px "Manrope", sans-serif; outline: none; }.distance-editor label b { padding-bottom: 16px; font: 9px "DM Mono", monospace; }
+.distance-range, .journey-point input { accent-color: var(--red); cursor: pointer; }
+.song-list { max-width: 760px; }.song-list label { min-height: 62px; display: grid; grid-template-columns: 46px 1fr auto; align-items: center; border-bottom: 1px solid #aaa69b; }.song-list span { color: var(--red); font: 10px "DM Mono", monospace; }.song-list input { min-width: 0; border: 0; background: transparent; outline: none; font: 14px "DM Mono", monospace; }.song-list button, .moment-editor > button { min-width: 72px; min-height: 44px; border: 0; background: transparent; color: #777870; cursor: pointer; font: 8px "DM Mono", monospace; letter-spacing: .1em; }.song-list button:hover, .moment-editor > button:hover { color: var(--red); }
+.add-row { margin-top: 22px; min-height: 48px; padding: 0 4px; border: 0; background: transparent; cursor: pointer; font: 500 10px "DM Mono", monospace; letter-spacing: .12em; }.add-row:hover { color: var(--red); }
+.journey-map { margin: 8px 0 54px; padding: 26px 12px 12px; }.journey-labels { display: flex; justify-content: space-between; font: 9px "DM Mono", monospace; letter-spacing: .12em; }.journey-labels span:last-child { text-align: right; }.journey-labels small { display: block; margin-top: 7px; color: var(--muted); font-size: 8px; }
+.journey-rail { position: relative; height: 70px; margin: 22px 5px 0; }.journey-rail > i { position: absolute; top: 20px; left: 0; right: 0; border-top: 1px solid #7e7c74; }.journey-rail::before, .journey-rail::after { content: ""; position: absolute; top: 16px; width: 9px; height: 9px; border: 1px solid #575851; border-radius: 50%; background: var(--paper); }.journey-rail::before { left: -4px; }.journey-rail::after { right: -4px; }
+.journey-point { position: absolute; top: 11px; width: 44px; height: 44px; transform: translateX(-22px); text-align: center; }.journey-point input { position: absolute; width: 44px; height: 44px; inset: 0; opacity: 0; }.journey-point::before { content: ""; display: block; margin: 5px auto 0; width: 11px; height: 11px; border-radius: 50%; background: var(--red); border: 3px solid var(--paper); box-shadow: 0 0 0 1px var(--red); }.journey-point.wood::before { border-radius: 1px; background: #745139; box-shadow: 0 0 0 1px #745139; }.journey-point.neon::before { background: #86426a; box-shadow: 0 0 0 1px #86426a, 0 0 8px #a75083; }.journey-point b { display: block; margin-top: 6px; font: 8px "DM Mono", monospace; }
+.moment-list { display: grid; gap: 10px; }.moment-editor { position: relative; display: grid; grid-template-columns: 180px 1fr 80px; align-items: end; gap: 24px; padding: 18px 20px; border: 1px solid #bbb6aa; background: rgba(255,255,255,.16); }.moment-editor > div { display: grid; grid-template-columns: 70px 1fr; gap: 12px; }.moment-editor label { color: var(--muted); font: 8px "DM Mono", monospace; letter-spacing: .1em; }.moment-editor input, .moment-editor select { width: 100%; height: 38px; display: block; margin-top: 6px; border: 0; border-bottom: 1px solid #99958b; border-radius: 0; background: transparent; outline: none; color: var(--ink); font: 11px "DM Mono", monospace; }.moment-editor select { cursor: pointer; }
+
+/* Narrative drive UI */
+.garage-caption { position: absolute; z-index: 4; left: max(28px, env(safe-area-inset-left)); bottom: max(28px, env(safe-area-inset-bottom)); display: flex; flex-direction: column; gap: 7px; color: #d8d9d3; text-shadow: 0 2px 12px #000; }.garage-caption span, .garage-caption small { color: #858c88; font: 8px "DM Mono", monospace; letter-spacing: .16em; }.garage-caption strong { font: 400 clamp(1rem,2vw,1.5rem) "Manrope", sans-serif; letter-spacing: .04em; }
+.start-journey { position: absolute; z-index: 6; left: 50%; bottom: max(34px, calc(env(safe-area-inset-bottom) + 18px)); transform: translateX(-50%); width: 170px; min-height: 58px; border: 0; background: transparent; color: #e8e7df; cursor: pointer; font: 500 10px "DM Mono", monospace; letter-spacing: .2em; text-shadow: 0 1px 8px #000; }.start-journey i { display: block; width: 28px; margin: 11px auto 0; border-top: 1px solid #b9b9b0; transition: width .25s; }.start-journey:hover i { width: 72px; }
+.ignition-label { position: absolute; z-index: 5; left: 50%; bottom: 12%; transform: translateX(-50%); color: #8cc2a1; font: 8px "DM Mono", monospace; letter-spacing: .18em; text-shadow: 0 0 10px #4d9564; }
+.drive-controls { position: absolute; inset: 0; z-index: 5; pointer-events: none; }.drive-controls button, .drive-controls input { pointer-events: auto; }.drive-controls.predrive { visibility: hidden; }.drive-controls.predrive .music-control { display: block; visibility: hidden; }
+.camera-toggle { position: absolute; left: max(22px, env(safe-area-inset-left)); bottom: max(24px, env(safe-area-inset-bottom)); width: 64px; min-height: 54px; display: flex; flex-direction: column; align-items: center; gap: 5px; border: 0; background: transparent; color: rgba(235,238,232,.78); cursor: pointer; font: 7px "DM Mono", monospace; letter-spacing: .12em; text-shadow: 0 1px 8px #000; }.camera-toggle svg { width: 22px; fill: currentColor; }
+.road-letter { position: absolute; right: max(24px, env(safe-area-inset-right)); bottom: max(24px, env(safe-area-inset-bottom)); width: 54px; height: 54px; padding: 15px; border: 0; background: transparent; color: rgba(238,239,232,.86); cursor: pointer; filter: drop-shadow(0 1px 7px #000); }.road-letter svg { width: 100%; fill: currentColor; }.road-letter i { position: absolute; top: 10px; right: 9px; width: 6px; height: 6px; border-radius: 50%; background: #cf3e35; box-shadow: 0 0 7px #e8483d; }
+.music-control { position: absolute; left: max(20px, env(safe-area-inset-left)); top: max(24px, env(safe-area-inset-top)); pointer-events: auto; }.music-toggle { min-width: 58px; min-height: 56px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4px; border: 0; background: transparent; color: #e7e9e1; cursor: pointer; text-shadow: 0 1px 8px #000; }.music-toggle span { font-size: 17px; }.music-toggle small { font: 7px "DM Mono", monospace; letter-spacing: .12em; }
+.music-panel { width: 250px; min-height: 130px; padding: 14px; border: 1px solid rgba(174,190,181,.28); background: rgba(5,10,12,.84); color: #8fc39e; box-shadow: inset 0 0 30px rgba(69,148,96,.08), 0 12px 40px rgba(0,0,0,.25); backdrop-filter: blur(8px); font: 8px "DM Mono", monospace; }.music-collapse { width: 100%; border: 0; background: transparent; color: #687d70; text-align: left; cursor: pointer; font: 7px "DM Mono", monospace; letter-spacing: .13em; }.music-display { display: grid; grid-template-columns: 45px 1fr; margin: 14px 0; }.music-display span { color: #567563; }.music-display strong { font-weight: 400; letter-spacing: .07em; }.music-buttons { display: flex; justify-content: center; gap: 8px; }.music-buttons button { width: 38px; height: 30px; border: 1px solid #3f5748; background: transparent; color: #96c6a4; cursor: pointer; }.music-panel label, .music-panel input { display: block; width: 100%; margin-top: 9px; height: 9px; accent-color: #75aa86; }
+.driver .music-control { left: 50%; top: auto; bottom: max(16px, env(safe-area-inset-bottom)); transform: translateX(-10%); }.driver .music-panel { width: 225px; min-height: 110px; transform: scale(.82); transform-origin: bottom center; background: rgba(3,8,9,.92); }.driver .music-collapse { cursor: default; }.driver .music-collapse:not(:hover) { color: #687d70; }
+.music-control { top: auto; bottom: max(18px, env(safe-area-inset-bottom)); width: clamp(230px, 25vw, 320px); }
+.music-screen { position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border: 1px solid rgba(174,190,181,.34); border-bottom: 0; background: #020303; box-shadow: 0 12px 38px rgba(0,0,0,.35); }
+.music-screen iframe, .youtube-mount { display: block; width: 100%; height: 100%; border: 0; opacity: 1; pointer-events: auto; }
+.music-screen > span { position: absolute; inset: 0; display: grid; place-items: center; background: #050808; color: #7f8c84; font: 8px "DM Mono", monospace; letter-spacing: .12em; }
+.music-control .music-panel { width: 100%; min-height: 0; padding: 10px 12px 11px; }
+.music-control .music-display { margin: 0 0 8px; }
+.track-buttons { display: flex; gap: 5px; margin-bottom: 8px; }
+.track-buttons button { flex: 1; min-width: 0; height: 27px; border: 1px solid #33443a; background: transparent; color: #668170; cursor: pointer; font: 8px "DM Mono", monospace; }
+.track-buttons button.active { border-color: #89b897; background: rgba(103,159,120,.13); color: #b5d7bd; box-shadow: 0 0 10px rgba(89,164,111,.15); }
+.driver .music-control { left: max(20px, env(safe-area-inset-left)); top: auto; bottom: max(18px, env(safe-area-inset-bottom)); transform: none; }
+.driver .music-panel { width: 100%; min-height: 0; transform: none; }
+.journey-active.chase .music-control { animation: road-vibration 1.4s ease-in-out infinite; }
+@keyframes road-vibration { 0%, 100% { transform: translate3d(0,0,0) rotate(-.12deg); } 45% { transform: translate3d(1px,-2px,0) rotate(.12deg); } 70% { transform: translate3d(-1px,-1px,0); } }
+.drive-url { max-width: min(760px, 92vw); overflow-wrap: anywhere; }
+.arrival-distance { position: absolute; z-index: 4; top: 22%; left: 50%; transform: translateX(-50%); text-align: center; color: #eef0ea; font: 300 clamp(2rem,5vw,4rem) "Manrope",sans-serif; text-shadow: 0 2px 20px #000; }.arrival-distance small { display: block; margin-top: 8px; font: 8px "DM Mono",monospace; letter-spacing: .2em; color: #a7aeac; }
+.destination-title { position: absolute; z-index: 5; left: 50%; top: 21%; transform: translateX(-50%); text-align: center; color: #eef0eb; font: 300 clamp(2rem,6vw,5rem) "Manrope",sans-serif; letter-spacing: .04em; text-shadow: 0 2px 22px #000; }.destination-title small { display: block; margin-top: 15px; color: #929ca2; font: 8px "DM Mono",monospace; letter-spacing: .17em; }
+
+@media (max-width: 680px) {
+  .creator { padding-left: 18px; padding-right: 18px; }.creator-header { margin-bottom: 12vh; }.creator-intro { grid-template-columns: 28px 1fr; margin-bottom: 72px; }.creator-intro h1 { font-size: clamp(3.2rem, 17vw, 5rem); line-height: .84; }.creator-intro span { margin-top: 28px; padding-right: 20px; }.car-options { grid-template-columns: 1fr; }.car-preview { height: 190px; }fieldset { padding-bottom: 64px; }.creator-actions { flex-direction: column-reverse; }.creator-actions button { width: 100%; }.ticket-result { margin-top: 2vh; }.ticket { grid-template-columns: 60px 1fr; min-height: 390px; }.ticket::before, .ticket::after { left: 49px; }.ticket-stub { padding: 20px 8px; }.ticket-stub strong { font-size: 28px; }.ticket-main { padding: 25px 22px; }.ticket-main h2 { margin-top: 42px; }.ticket-grid { gap: 8px; }.ticket-code { margin-top: 30px; font-size: 14px; }.loading-screen { grid-template-columns: minmax(180px, 280px) 42px; }.distance-editor { grid-template-columns: 1fr; gap: 24px; }.moment-editor { grid-template-columns: 1fr; gap: 10px; }.moment-editor > button { justify-self: end; }.journey-map { margin-left: -6px; margin-right: -6px; }.driver .music-control { left: max(10px, env(safe-area-inset-left)); bottom: max(76px, env(safe-area-inset-bottom)); transform: none; }.driver .music-panel, .chase .music-panel { width: 100%; transform: none; }.camera-toggle { left: max(10px, env(safe-area-inset-left)); bottom: max(12px, env(safe-area-inset-bottom)); }.road-letter { right: max(10px, env(safe-area-inset-right)); bottom: max(12px, env(safe-area-inset-bottom)); }.music-control { left: max(10px, env(safe-area-inset-left)); top: auto; bottom: max(76px, env(safe-area-inset-bottom)); width: min(260px, calc(100vw - 20px)); }.garage-caption { left: max(18px, env(safe-area-inset-left)); bottom: max(18px, env(safe-area-inset-bottom)); }
+}
+@media (max-height: 500px) and (orientation: landscape) { .letter-overlay blockquote { font-size: 1rem; margin: 14px 0; }.letter-mark { margin-bottom: 12px; }.letter-overlay button { margin-top: 14px; }.driver .music-panel { transform: scale(.62); }.garage-caption { bottom: 12px; }.destination-title { top: 12%; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }

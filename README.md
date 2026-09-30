@@ -1,45 +1,31 @@
-# JDM Garage
+# JDM Infinite Drive
 
-A fullscreen, cinematic Three.js automotive experience. It begins with `HELLO.`, reports actual GLB loading state, then reveals a single vehicle with constrained orbit controls and an optional cinematic camera.
-
-## Stack
-
-Next.js, React, TypeScript, React Three Fiber and Three.js.
+A database-free, shareable cinematic journey with a beginning and destination. A creator adds the recipient's name, selects a JDM car, 5-100 virtual kilometers, up to five YouTube tracks, physical road messages and an optional letter. The visitor begins in a used Japanese garage, starts the car, drives from sunset into a starry night and arrives at a mountain overlook.
 
 ## Run
 
 ```bash
 npm install
+cp .env.example .env.local
 npm run dev
+npm run typecheck
 npm run build
 ```
 
-The project uses only public paths, so it can be deployed to Vercel without server-specific configuration. The build script selects Next.js' official WASM compiler fallback because the native ARM SWC binary is not compatible with this local environment; this keeps `npm run build` reproducible.
-
-Development writes to `.next-dev`; production builds and `npm start` use `.next`. This separation prevents builds from overwriting the chunks of a running development server.
+`/drive/NIGHT01` is the built-in demo. Created drives encode their validated configuration directly in a URL-safe token, so no database, account or environment secret is required. Anyone with the link can read its contents; links are unlisted rather than private or encrypted.
 
 ## Architecture
 
-- `src/data/cars.ts`: vehicle contract and collection.
-- `src/components/experience`: canvas, lighting, vehicle normalization and error boundary.
-- `src/components/intro`: entry sequence and real loader UI.
-- `src/components/ui`: deliberately minimal HUD.
-- `public/models/miata/car.glb`: swappable vehicle asset.
+- `src/app/create`: standalone Creator.
+- `src/app/drive/[slug]`: standalone Visitor and dynamic OpenGraph image.
+- `src/lib/drive-links.ts`: compact URL encoding and decoding.
+- `src/components/drive`: garage, licensed vehicle, pooled road, environment, narrative timeline, cameras, letter and YouTube playlist controller.
+- `src/lib/drives.ts`: shared contracts, sanitization and validation.
+- `ARCHITECTURE.md`: boundaries and wireframes.
+- `ASSET_RESEARCH.md`, `CREDITS.md`: asset audit and attribution.
 
-## Add Or Replace A Car
+The car/camera remain around the origin. Eight 36-unit road sections recycle behind the camera. Quality detection adjusts DPR, shadows, vegetation and procedural star count. Music uses only the official YouTube IFrame Player API; no audio is downloaded, extracted or stored.
 
-Add an entry to `cars` in `src/data/cars.ts` and place a legally reusable GLB under `public/models`. The scene calculates its bounding box and centers/scales it rather than relying on the source model's origin.
+## Asset Status
 
-The hero GLB at `public/models/miata/car.glb` is now an actual Miata NA; `public/models/ae86.glb` is a stylized AE86. The navigation cycles only these two available assets, not procedural stand-ins. Do not use an asset merely because it is public. Record its author, exact source URL, license, format, size and redistribution status in `ASSET_RESEARCH.md`, then preserve required attribution in `CREDITS.md` and `public/credits.txt`.
-
-The initial `Miata Vibe` line-up has ten configured cars: MX-5 NA, Beat, Cappuccino, AZ-1, MR2 AW11, CR-X, AE86, Civic EG, RX-7 FC and Silvia S13. A car is only interactive when its `assetReady` flag is enabled after its model has passed this license review.
-
-## Optimization
-
-Use `gltf-transform` to remove unused data and consider Draco or Meshopt for a larger production model. Keep mobile textures near 1K-2K and preload only the current vehicle plus, at most, the next one.
-
-## Licensing
-
-The Miata is CC BY 4.0 by Ricy with a GLB adaptation by Shixuan Li. The AE86 is CC BY 3.0 by IvOfficial. Full attribution is in `CREDITS.md` and is accessible in the experience through `MODEL CREDITS`; research notes are in `ASSET_RESEARCH.md`.
-
-Validate bundled GLB headers and embedded resources with `node scripts/check-models.mjs`.
+The audited Miata is bundled under CC BY 4.0 and used for both exterior and cockpit views. File inspection confirms named meshes for the steering wheel, radio, radio screen, seats and mirrors. No legally redistributable Cappuccino with a verified detailed interior was found, so its current visual is explicitly procedural rather than an unrelated or unlicensed model. See `ASSET_RESEARCH.md` before replacing it.

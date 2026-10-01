@@ -17,7 +17,7 @@ const languageNames: Record<GreetingLanguage, string> = { en: "ENGLISH", es: "ES
 
 type Stage = "hello" | "loading" | "reveal" | "experience";
 
-export function GarageExperience({ transparent = false, helloName, helloLanguage }: { transparent?: boolean; helloName?: string; helloLanguage?: GreetingLanguage }) {
+export function GarageExperience({ transparent = false, helloName, helloLanguage, onStageChange }: { transparent?: boolean; helloName?: string; helloLanguage?: GreetingLanguage; onStageChange?: (stage: Stage) => void }) {
   const [stage, setStage] = useState<Stage>("hello");
   const [loaded, setLoaded] = useState(false);
   const [assetProgress, setAssetProgress] = useState(0);
@@ -54,6 +54,7 @@ export function GarageExperience({ transparent = false, helloName, helloLanguage
   }, [reducedMotion, stage]);
   const markLoaded = useCallback(() => setLoaded(true), []);
   const finishHello = useCallback(() => setStage("loading"), []);
+  useEffect(() => { onStageChange?.(stage); }, [onStageChange, stage]);
   useEffect(() => {
     if (!cinematic) return;
     const onKey = (event: KeyboardEvent) => { if (event.key === "Escape") setCinematic(false); };

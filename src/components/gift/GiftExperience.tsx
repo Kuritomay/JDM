@@ -12,7 +12,9 @@ export function GiftExperience({ gift }: { gift: Gift }) {
   const [entered, setEntered] = useState(false);
   const [letterOpen, setLetterOpen] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState(gift.language);
+  const [carsReady, setCarsReady] = useState(false);
   const ready = useCallback(() => setVideoReady(true), []);
+  const handleStage = useCallback((stage: "hello" | "loading" | "reveal" | "experience") => setCarsReady(stage === "reveal" || stage === "experience"), []);
   const locale = useUiLocale();
   const copy = getUiCopy(locale);
 
@@ -23,7 +25,7 @@ export function GiftExperience({ gift }: { gift: Gift }) {
 
   return <div className="gift-experience">
     <VideoBackdrop ref={video} songs={gift.songs} onReady={ready} letterMode={letterOpen} />
-    {entered && <GarageExperience transparent helloName={gift.to} helloLanguage={selectedLanguage} />}
+    {entered && <GarageExperience transparent helloName={gift.to} helloLanguage={selectedLanguage} onStageChange={handleStage} />}
     {!entered && <div className="gift-entry">
       <span>{copy.forFrom(gift.to.toUpperCase(), gift.from.toUpperCase())}</span>
       <select
@@ -43,7 +45,7 @@ export function GiftExperience({ gift }: { gift: Gift }) {
       <button disabled={!videoReady} onClick={enter}>{videoReady ? copy.enter : copy.loadingVideo}</button>
       <small>{copy.soundOn(gift.songs.length)}</small>
     </div>}
-    {entered && <button className="gift-letter-button" onClick={() => setLetterOpen(true)} aria-label={copy.letterLabel}><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3V5Zm1.8 1.8 7.2 5.6 7.2-5.6H4.8Zm14.4 10.4V9.1L12 14.7 4.8 9.1v8.1h14.4Z" /></svg><i /></button>}
+    {entered && carsReady && <button className="gift-letter-button" onClick={() => setLetterOpen(true)} aria-label={copy.letterLabel}><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3V5Zm1.8 1.8 7.2 5.6 7.2-5.6H4.8Zm14.4 10.4V9.1L12 14.7 4.8 9.1v8.1h14.4Z" /></svg><i /></button>}
     {letterOpen && <div className="gift-letter"><div className="gift-letter-copy"><span>{copy.labelFor} {gift.to}</span><blockquote>{gift.letter}</blockquote><cite>{copy.labelFrom} {gift.from}</cite><button onClick={() => setLetterOpen(false)}>{copy.close}</button></div></div>}
   </div>;
 }

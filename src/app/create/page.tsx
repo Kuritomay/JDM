@@ -1,5 +1,5 @@
-import { GiftEditor } from "../../components/editor/GiftEditor";
+import { redirect } from "next/navigation";
 
 export default function CreatePage() {
-  return <GiftEditor />;
+  redirect("/");
 }

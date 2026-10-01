@@ -61,7 +61,6 @@ export interface UiCopy {
   notFound1: string;
   notFound2: string;
   createNew: string;
-  editorEntry: string;
 }
 
 const copy: Record<UiLocale, UiCopy> = {
@@ -103,7 +102,6 @@ const copy: Record<UiLocale, UiCopy> = {
     notFound1: "THIS LINK",
     notFound2: "ISN'T HERE.",
     createNew: "CREATE A NEW ONE",
-    editorEntry: "CREATE A GIFT",
   },
   es: {
     editorHeader: "MÚSICA + CARTA",
@@ -143,7 +141,6 @@ const copy: Record<UiLocale, UiCopy> = {
     notFound1: "ESTE ENLACE",
     notFound2: "NO EXISTE.",
     createNew: "CREAR UNO NUEVO",
-    editorEntry: "CREAR UN REGALO",
   },
   ja: {
     editorHeader: "ミュージック + レター",
@@ -183,7 +180,6 @@ const copy: Record<UiLocale, UiCopy> = {
     notFound1: "このリンクは",
     notFound2: "ありません。",
     createNew: "新しく作成する",
-    editorEntry: "ギフトを作る",
   },
 };
 

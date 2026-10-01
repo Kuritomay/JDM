@@ -67,7 +67,7 @@ export function CreateDrive() {
     setCreated({ ...result.data, slug });
   }
 
-  if (created) return <main className="creator creator-result"><header className="creator-header"><a href="/create" className="wordmark">JDM / 終点</a><span>DRIVE ISSUED</span></header><Ticket drive={created} /></main>;
+  if (created) return <main className="creator creator-result"><header className="creator-header"><a href="/create-drive" className="wordmark">JDM / 終点</a><span>DRIVE ISSUED</span></header><Ticket drive={created} /></main>;
 
   return <main className="creator">
     <header className="creator-header"><span className="wordmark">JDM / 終点</span><span>CREATE / 01</span></header>

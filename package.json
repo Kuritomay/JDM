@@ -9,10 +9,15 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@react-three/drei": "^10.7.9",
     "@react-three/fiber": "^9.1.0",
+    "@tailwindcss/postcss": "^4.3.3",
+    "framer-motion": "^13.4.6",
     "next": "^15.2.0",
+    "postcss": "^8.5.28",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "tailwindcss": "^4.3.3",
     "three": "^0.174.0"
   },
   "devDependencies": {

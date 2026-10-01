@@ -7,9 +7,16 @@ GLB adaptation, Merlot paint and tan upholstery by Shixuan Li.
 https://shixuanli.com/objects
 https://shixuanli.com/miata-na.glb
 
-"Toyota AE86" by IvOfficial.
+LEGACY ASSET (not loaded by JDM Infinite Drive): "Toyota AE86" by IvOfficial.
 https://poly.pizza/m/ZEFWmOPSgh
 CC BY 3.0: https://creativecommons.org/licenses/by/3.0/
 
-Garage changes: display scale and placement only.
+Infinite Drive changes: runtime display scale, placement and lighting only.
+Road, landscape, cockpit and stars are original procedural geometry.
 Assets supplied as-is without warranties. No manufacturer endorsement implied.
+
+"Aerial Asphalt 01" by Rob Tuytel / Poly Haven. CC0 1.0.
+https://polyhaven.com/a/aerial_asphalt_01
+
+"Nature Kit" by Kenney. CC0 1.0.
+https://kenney.nl/assets/nature-kit

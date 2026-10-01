@@ -11,6 +11,7 @@ declare global {
 
 interface YouTubePlayer {
   playVideo(): void;
+  pauseVideo(): void;
   loadVideoById(id: string): void;
   setVolume(value: number): void;
   destroy(): void;

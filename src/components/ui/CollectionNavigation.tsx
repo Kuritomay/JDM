@@ -1,9 +1,12 @@
 "use client";
 
+import { getUiCopy, useUiLocale } from "../../lib/ui-locale";
+
 export function CollectionNavigation({ current, total, onPrevious, onNext }: { current: number; total: number; onPrevious: () => void; onNext: () => void }) {
-  return <div className="collection-navigation" aria-label="Collection position">
-    <button type="button" onClick={onPrevious} aria-label="Previous car">&larr;</button>
-    <span>CAR&nbsp;&nbsp;{String(current).padStart(2, "0")} / {String(total).padStart(2, "0")}</span>
-    <button type="button" onClick={onNext} aria-label="Next car">&rarr;</button>
+  const copy = getUiCopy(useUiLocale());
+  return <div className="collection-navigation" aria-label={copy.collection(current, total)}>
+    <button type="button" onClick={onPrevious} aria-label="←">&larr;</button>
+    <span>{copy.collection(current, total)}</span>
+    <button type="button" onClick={onNext} aria-label="→">&rarr;</button>
   </div>;
 }

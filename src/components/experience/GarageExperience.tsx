@@ -10,10 +10,14 @@ import { CollectionNavigation } from "../ui/CollectionNavigation";
 import { GarageScene } from "./GarageScene";
 import { SceneErrorBoundary } from "./SceneErrorBoundary";
 import { DefaultLoadingManager } from "three";
+import type { GreetingLanguage } from "../../lib/gift";
+import { getUiCopy, useUiLocale } from "../../lib/ui-locale";
 
-type Stage = "hello" | "loading" | "experience";
+const languageNames: Record<GreetingLanguage, string> = { en: "ENGLISH", es: "ESPAÑOL", ja: "日本語" };
 
-export function GarageExperience() {
+type Stage = "hello" | "loading" | "reveal" | "experience";
+
+export function GarageExperience({ transparent = false, helloName, helloLanguage }: { transparent?: boolean; helloName?: string; helloLanguage?: GreetingLanguage }) {
   const [stage, setStage] = useState<Stage>("hello");
   const [loaded, setLoaded] = useState(false);
   const [assetProgress, setAssetProgress] = useState(0);
@@ -21,6 +25,9 @@ export function GarageExperience() {
   const [carIndex, setCarIndex] = useState(0);
   const [reducedMotion, setReducedMotion] = useState(false);
   const car = availableCars[carIndex];
+  const uiLocale = useUiLocale();
+  const copy = getUiCopy(uiLocale);
+  const greetingLanguage = helloLanguage ?? uiLocale;
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -30,10 +37,6 @@ export function GarageExperience() {
     return () => media.removeEventListener("change", update);
   }, []);
   useEffect(() => {
-    const timer = window.setTimeout(() => setStage("loading"), reducedMotion ? 300 : 2500);
-    return () => window.clearTimeout(timer);
-  }, [reducedMotion]);
-  useEffect(() => {
     DefaultLoadingManager.onProgress = (_url, loadedItems, totalItems) => {
       setAssetProgress(totalItems ? (loadedItems / totalItems) * 100 : 0);
     };
@@ -41,10 +44,22 @@ export function GarageExperience() {
   }, []);
   useEffect(() => {
     if (!loaded || stage !== "loading") return;
-    const timer = window.setTimeout(() => setStage("experience"), reducedMotion ? 0 : 420);
+    const timer = window.setTimeout(() => setStage("reveal"), reducedMotion ? 0 : 350);
     return () => window.clearTimeout(timer);
   }, [loaded, reducedMotion, stage]);
+  useEffect(() => {
+    if (stage !== "reveal") return;
+    const timer = window.setTimeout(() => setStage("experience"), reducedMotion ? 0 : 1900);
+    return () => window.clearTimeout(timer);
+  }, [reducedMotion, stage]);
   const markLoaded = useCallback(() => setLoaded(true), []);
+  const finishHello = useCallback(() => setStage("loading"), []);
+  useEffect(() => {
+    if (!cinematic) return;
+    const onKey = (event: KeyboardEvent) => { if (event.key === "Escape") setCinematic(false); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [cinematic]);
   function changeCar(direction: number) {
     setLoaded(false);
     setAssetProgress(0);
@@ -53,15 +68,17 @@ export function GarageExperience() {
     setCarIndex((index) => (index + direction + availableCars.length) % availableCars.length);
   }
 
-  return <main className="garage">
-    {stage !== "hello" && <SceneErrorBoundary><GarageScene key={car.id} car={car} revealed={stage === "experience"} cinematic={cinematic} onLoaded={markLoaded} /></SceneErrorBoundary>}
-    {stage === "hello" && <Hello />}
-    {stage === "loading" && <Loader progress={loaded ? 100 : assetProgress} />}
+  return <main className={`garage${transparent ? " transparent" : ""} stage-${stage}`}>
+    {stage !== "hello" && <SceneErrorBoundary><GarageScene key={car.id} car={car} revealed={stage === "reveal" || stage === "experience"} cinematic={cinematic} onLoaded={markLoaded} transparent={transparent} /></SceneErrorBoundary>}
+    {stage === "hello" && <Hello name={helloName} language={greetingLanguage} reducedMotion={reducedMotion} onComplete={finishHello} />}
+    {stage === "loading" && <Loader progress={loaded ? 100 : assetProgress} language={greetingLanguage} />}
+    {stage === "reveal" && <div className="reveal-curtain" />}
     {stage === "experience" && <div className={cinematic ? "hud hidden" : "hud"}>
       <CarInfo car={car} />
       <CollectionNavigation current={carIndex + 1} total={availableCars.length} onPrevious={() => changeCar(-1)} onNext={() => changeCar(1)} />
-      <a className="asset-credits" href="/credits.txt" target="_blank" rel="noreferrer">MODEL CREDITS</a>
-      <ExperienceControls cinematic={cinematic} onCinematic={() => setCinematic((value) => !value)} />
+      <a className="asset-credits" href="/credits.txt" target="_blank" rel="noreferrer">{copy.modelCredits}</a>
+      <div className="language-badge">{languageNames[greetingLanguage]}</div>
     </div>}
+    {stage === "experience" && <ExperienceControls cinematic={cinematic} onCinematic={() => setCinematic((value) => !value)} />}
   </main>;
 }

@@ -16,6 +16,8 @@ npm run build
 
 The project uses only public paths, so it can be deployed to Vercel without server-specific configuration. The build script selects Next.js' official WASM compiler fallback because the native ARM SWC binary is not compatible with this local environment; this keeps `npm run build` reproducible.
 
+`/create` provides a database-free editor for one to five YouTube links and a letter. The generated `/gift/[token]` link keeps the original Miata and Trueno garage, plays the selected videos sequentially behind the cars, and exposes the letter from the red-dot envelope control.
+
 Development writes to `.next-dev`; production builds and `npm start` use `.next`. This separation prevents builds from overwriting the chunks of a running development server.
 
 ## Architecture

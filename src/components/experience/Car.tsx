@@ -6,7 +6,18 @@ import { Box3, Group, Mesh, Vector3 } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import type { ReadyCar } from "../../data/cars";
 
-export function Car({ car, onLoaded }: { car: ReadyCar; onLoaded: () => void }) {
+let carAudio: HTMLAudioElement | null = null;
+
+function playCarSound() {
+  if (typeof window === "undefined") return;
+  try {
+    if (!carAudio) carAudio = new Audio("/car-horn.mp3");
+    carAudio.currentTime = 0;
+    void carAudio.play();
+  } catch {}
+}
+
+export function Car({ car, onLoaded, onClick }: { car: ReadyCar; onLoaded: () => void; onClick?: () => void }) {
   const gltf = useLoader(GLTFLoader, car.modelPath);
   const [scene] = useState(() => gltf.scene.clone(true));
   const group = useRef<Group>(null);
@@ -28,5 +39,5 @@ export function Car({ car, onLoaded }: { car: ReadyCar; onLoaded: () => void }) 
   }, [car.scale, scene]);
 
   useEffect(() => onLoaded(), [onLoaded]);
-  return <group rotation={car.rotation}><group ref={group}><primitive object={scene} /></group></group>;
+  return <group rotation={car.rotation} onClick={() => { playCarSound(); onClick?.(); }}><group ref={group}><primitive object={scene} /></group></group>;
 }

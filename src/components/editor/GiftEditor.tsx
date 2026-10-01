@@ -25,7 +25,8 @@ export function GiftEditor() {
   function submit(event: FormEvent) {
     event.preventDefault();
     setError("");
-    const result = createGift(to, from, language, songs, letter, locale);
+    const links = songs.map((song) => song.trim()).filter(Boolean);
+    const result = createGift(to, from, language, links, letter, locale);
     if (!result.gift) { setError(result.error ?? copy.createError); return; }
     setLink(`${window.location.origin}/gift/${encodeGift(result.gift)}`);
   }
@@ -46,8 +47,8 @@ export function GiftEditor() {
         <label className="editor-language"><span>{copy.labelGreeting}</span><select value={language} onChange={(event) => setLanguage(event.target.value as GreetingLanguage)}><option value="es">HOLA · Español</option><option value="en">HELLO · English</option><option value="ja">こんにちは · 日本語</option></select></label>
       </fieldset>
       <fieldset>
-        <legend><b>02</b> {copy.legendPlaylist} <em>{songs.length} / 5</em></legend>
-        <div className="editor-songs">{songs.map((song, index) => <label key={index}><span>{String(index + 1).padStart(2, "0")}</span><input required type="url" value={song} onChange={(event) => updateSong(index, event.target.value)} placeholder="https://youtu.be/..." />{songs.length > 1 && <button type="button" onClick={() => setSongs((current) => current.filter((_, position) => position !== index))}>{copy.remove}</button>}</label>)}</div>
+        <legend><b>02</b> {copy.legendPlaylist} <em>{songs.filter((song) => song.trim()).length} / 5</em></legend>
+        <div className="editor-songs">{songs.map((song, index) => <label key={index}><span>{String(index + 1).padStart(2, "0")}</span><input type="url" value={song} onChange={(event) => updateSong(index, event.target.value)} placeholder="https://youtu.be/..." />{songs.length > 1 && <button type="button" onClick={() => setSongs((current) => current.filter((_, position) => position !== index))}>{copy.remove}</button>}</label>)}</div>
         {songs.length < 5 && <button className="editor-add" type="button" onClick={() => setSongs((current) => [...current, ""])}>{copy.addVideo}</button>}
         <p className="editor-note">{copy.songsNote}</p>
       </fieldset>
